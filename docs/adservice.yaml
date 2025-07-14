@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: Targeting Engine Adserving API
+  version: 1.0.0
+  description: |
+    API for serving targeted ad campaigns based on app, country, and OS.
+servers:
+  - url: http://localhost:8080
+paths:
+  /v1/delivery:
+    get:
+      summary: Get active campaigns matching targeting rules
+      parameters:
+        - in: query
+          name: app
+          schema:
+            type: string
+          required: true
+          description: App identifier
+        - in: query
+          name: country
+          schema:
+            type: string
+          required: true
+          description: Country name (lowercase)
+        - in: query
+          name: os
+          schema:
+            type: string
+          required: true
+          description: OS name (lowercase)
+      responses:
+        '200':
+          description: Matching campaigns found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+        '204':
+          description: No matching campaigns
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /swagger:
+    get:
+      summary: Get OpenAPI spec
+      responses:
+        '200':
+          description: OpenAPI YAML file
+components:
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        cid:
+          type: string
+          description: Campaign name or ID
+        img:
+          type: string
+          description: Image URL
+        cta:
+          type: string
+          description: Call to action
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message 

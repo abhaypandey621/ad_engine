@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  adservice:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_DSN=lemma:Admin@123@tcp(mysql:3306)/targeting_engine
+    logging:
+      driver: "json-file"
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin@123
+      MYSQL_DATABASE: targeting_engine
+      MYSQL_USER: lemma
+      MYSQL_PASSWORD: Admin@123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./res/mysql:/docker-entrypoint-initdb.d
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - adservice
+
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    volumes:
+      - /var/log:/var/log
+      - ./promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+      - loki
+    volumes:
+      - ./docs/grafana_dashboard.json:/var/lib/grafana/dashboards/grafana_dashboard.json
+      - ./docs:/var/lib/grafana/dashboards

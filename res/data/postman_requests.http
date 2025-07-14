@@ -1,0 +1,155 @@
+### 1. Single campaign match (duolingo)
+GET http://localhost:8080/v1/delivery?app=com.abc.xyz&country=germany&os=android
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "duolingo", "img": "https://duolingo.com", "cta": "Install"}
+# ]
+
+### 2. Multiple campaign match (spotify, subwaysurfer)
+GET http://localhost:8080/v1/delivery?app=com.gametion.ludokinggame&country=us&os=android
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "spotify", "img": "https://spotify.com", "cta": "Download"},
+#   {"cid": "subwaysurfer", "img": "https://subwaysurfer.com", "cta": "Play"}
+# ]
+
+### 3. No campaign match (valid app, invalid country)
+GET http://localhost:8080/v1/delivery?app=com.abc.xyz&country=india&os=android
+Accept: application/json
+
+# Expected: 204 No Content
+
+### 4. No campaign match (valid app, invalid os)
+GET http://localhost:8080/v1/delivery?app=com.abc.xyz&country=germany&os=ios
+Accept: application/json
+
+# Expected: 204 No Content
+
+### 5. Missing app param
+GET http://localhost:8080/v1/delivery?country=germany&os=android
+Accept: application/json
+
+# Expected: 400 Bad Request
+# {"error": "missing app param"}
+
+### 6. Invalid app identifier
+GET http://localhost:8080/v1/delivery?app=invalid.app&country=germany&os=android
+Accept: application/json
+
+# Expected: 400 Bad Request
+# {"error": "invalid app identifier"}
+
+### 7. Nike campaign (ios, india)
+GET http://localhost:8080/v1/delivery?app=com.gametion.ludokinggame&country=india&os=ios
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "Nike", "img": "https://nike.com", "cta": "Play"}
+# ]
+
+### 8. BMW campaign (pubgmobilelite, canada, windows)
+GET http://localhost:8080/v1/delivery?app=com.gametion.pubgmobilelite&country=canada&os=windows
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "BMW", "img": "https://bmw.com", "cta": "Play"}
+# ] 
+
+### 9. Adidas campaign (no match for com.gametion.ludokinggame in india on ios)
+GET http://localhost:8080/v1/delivery?app=com.gametion.ludokinggame&country=india&os=ios
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "Nike", "img": "https://nike.com", "cta": "Play"}
+# ]
+# (Adidas is not targeted for this combination)
+
+### 10. Reebok campaign (no match for com.gametion.pubgmobile in france on android)
+GET http://localhost:8080/v1/delivery?app=com.gametion.pubgmobile&country=france&os=android
+Accept: application/json
+
+# Expected: 204 No Content
+
+### 11. Multiple campaigns, but only one matches (com.gametion.ludokinggame in us on ios)
+GET http://localhost:8080/v1/delivery?app=com.gametion.ludokinggame&country=us&os=ios
+Accept: application/json
+
+# Expected: 204 No Content
+
+### 12. Puma campaign (com.gametion.candycrush in uk on windows)
+GET http://localhost:8080/v1/delivery?app=com.gametion.candycrush&country=uk&os=windows
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "Puma", "img": "https://puma.com", "cta": "Play"}
+# ]
+
+### 13. Puma campaign (com.gametion.clashofclans in portugal on linux)
+GET http://localhost:8080/v1/delivery?app=com.gametion.clashofclans&country=portugal&os=linux
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "Puma", "img": "https://puma.com", "cta": "Play"}
+# ]
+
+### 14. Puma campaign (com.gametion.pubg in australia on macos)
+GET http://localhost:8080/v1/delivery?app=com.gametion.pubg&country=australia&os=macos
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "Puma", "img": "https://puma.com", "cta": "Play"}
+# ]
+
+### 15. Puma campaign (com.gametion.pubgmobile in canada on windows)
+GET http://localhost:8080/v1/delivery?app=com.gametion.pubgmobile&country=canada&os=windows
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "Puma", "img": "https://puma.com", "cta": "Play"}
+# ]
+
+### 16. BMW campaign (com.gametion.pubgmobilelite in canada on windows)
+GET http://localhost:8080/v1/delivery?app=com.gametion.pubgmobilelite&country=canada&os=windows
+Accept: application/json
+
+# Expected: 200 OK
+# [
+#   {"cid": "BMW", "img": "https://bmw.com", "cta": "Play"}
+# ]
+
+### 17. No campaigns for valid app, valid country, valid os (com.gametion.subwaysurfer in spain on android)
+GET http://localhost:8080/v1/delivery?app=com.gametion.subwaysurfer&country=spain&os=android
+Accept: application/json
+
+# Expected: 204 No Content
+
+### 18. No campaigns for valid app, valid country, valid os (com.gametion.candycrush in italy on ios)
+GET http://localhost:8080/v1/delivery?app=com.gametion.candycrush&country=italy&os=ios
+Accept: application/json
+
+# Expected: 204 No Content
+
+### 19. All params missing
+GET http://localhost:8080/v1/delivery
+Accept: application/json
+
+# Expected: 400 Bad Request
+# {"error": "missing app param"}
+
+### 20. Only app param present
+GET http://localhost:8080/v1/delivery?app=com.abc.xyz
+Accept: application/json
+
+# Expected: 400 Bad Request
+# {"error": "missing country param"} 

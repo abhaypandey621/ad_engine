@@ -1,0 +1,27 @@
+
+
+request parsing and Validation
+
+Pre filtering - Fast targeting
+
+Post filtering 
+
+Reporting and Event Tracker
+
+Ad serving - response 
+
+
+
+---------------------------------
+
+Future Work : 
+
+make file
+linter checks
+
+Prometheus and Graphana
+Dockerfile
+
+Deployment using K8s, Terraform
+
+HA Proxy
