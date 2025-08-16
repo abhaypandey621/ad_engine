@@ -1,0 +1,5 @@
+server:
+  port: 8080
+mysql:
+  dsn: "lemma:Admin@123@tcp(localhost:3306)/targeting_engine"
+campaign_refresh_interval_minutes: 5

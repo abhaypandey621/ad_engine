@@ -1,0 +1,17 @@
+-- Country Table
+CREATE TABLE IF NOT EXISTS country (
+    country_id INT AUTO_INCREMENT PRIMARY KEY,
+    country_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- OS Table
+CREATE TABLE IF NOT EXISTS os (
+    os_id INT AUTO_INCREMENT PRIMARY KEY,
+    os_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- App Table
+CREATE TABLE IF NOT EXISTS app (
+    app_id INT AUTO_INCREMENT PRIMARY KEY,
+    app_identifier VARCHAR(255) NOT NULL UNIQUE
+);

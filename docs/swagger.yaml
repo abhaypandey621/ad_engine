@@ -1,0 +1,16 @@
+openapi: 3.0.0
+components:
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        campaign_id:
+          type: string
+        name:
+          type: string
+        image_url:
+          type: string
+        cta:
+          type: string
+        status:
+          type: string 

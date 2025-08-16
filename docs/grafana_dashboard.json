@@ -1,0 +1,43 @@
+{
+  "__inputs": [],
+  "__requires": [],
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Ad Requests by Status",
+      "targets": [
+        {
+          "expr": "sum by (status) (ad_requests_total)",
+          "legendFormat": "{{status}}"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "type": "graph",
+      "title": "Ad Request Duration (seconds)",
+      "targets": [
+        {
+          "expr": "ad_request_duration_seconds",
+          "legendFormat": "duration"
+        }
+      ],
+      "datasource": "Prometheus"
+    },
+    {
+      "type": "graph",
+      "title": "Campaign Cache Refresh Errors",
+      "targets": [
+        {
+          "expr": "campaign_cache_refresh_errors_total",
+          "legendFormat": "errors"
+        }
+      ],
+      "datasource": "Prometheus"
+    }
+  ],
+  "templating": {"list": []},
+  "schemaVersion": 16,
+  "version": 1,
+  "title": "Adservice Metrics"
+} 
